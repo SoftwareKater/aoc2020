@@ -38,5 +38,40 @@ def solve(path: str):
     # print(res)
     print(len(res))
 
-
+print('*** PART 1 ***')
 solve('d7_inpt.txt')
+print()
+
+from functools import reduce
+
+def solvePart2(path: str):
+    rules = readInput(path)
+    bags = {}
+    dig = {'shiny gold bag': 1}
+
+    while dig:
+        print('---')
+        print(bags)
+        print(dig)
+        newDig = {}
+        for container, countContainer in dig.items():
+            if container in bags:
+                bags[container] += countContainer
+            else:
+                bags[container] = countContainer
+            for content, countContent in rules[container].items():
+                if content == 'other bag' or countContent == 0:
+                    continue
+                if content in newDig:
+                    newDig[content] += countContainer * countContent
+                else:
+                    newDig[content] = countContainer * countContent
+
+        dig = dict(newDig)
+    print('======')
+    print(bags)
+    res = reduce(lambda x, y: x+y, bags.values()) - 1
+    print(res)
+
+print('*** PART 2 ***')
+solvePart2('d7_inpt.txt')
